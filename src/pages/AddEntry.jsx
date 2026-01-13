@@ -64,6 +64,7 @@ const CustomDropdown = ({ options, value, onChange, placeholder }) => {
 const AddEntry = () => {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
   const [skillOptions, setSkillOptions] = useState([])
   const [resultOptions, setResultOptions] = useState([])
   const [practiceTypes, setPracticeTypes] = useState([])
@@ -130,10 +131,25 @@ const AddEntry = () => {
       }
       
       await createEntry(entryData)
+      setShowSuccess(true)
       
-      // ... (Success notification remains same) ...
+      // Reset form fields
+      setFormData({
+        skill: '',
+        hoursSpent: '',
+        dateRange: { start: '', end: '' },
+        practiceType: [],
+        projectName: '',
+        otherPracticeType: '',
+        resultAchieved: '',
+        notes: ''
+      })
+
+      // Hide success message after 4 seconds
+      setTimeout(() => setShowSuccess(false), 4000)
+      
     } catch (error) {
-       // ... (Error handling) ...
+       console.error('Failed to create entry:', error)
     } finally {
       setIsSubmitting(false)
     }
@@ -153,6 +169,17 @@ const AddEntry = () => {
               </h1>
               <p className="text-slate-500 font-medium">Record your learning activities and track your growth.</p>
             </div>
+
+            {showSuccess && (
+              <div className="mb-8 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3 text-emerald-700 font-bold animate-fade-down">
+                <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span>Log Saved Successfully! All fields have been cleared.</span>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-8">
               

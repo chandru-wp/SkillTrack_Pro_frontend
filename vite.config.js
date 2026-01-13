@@ -30,5 +30,5 @@ export default defineConfig({
       }
     })
   ],
-  base: './', // Ensures assets load correctly on GitHub Pages
+  base: '/SkillTrack_Pro_frontend/', // Correct base path for your repo name
 })
