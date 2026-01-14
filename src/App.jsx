@@ -8,7 +8,7 @@ import AdminDashboard from "./pages/AdminDashboard"
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />

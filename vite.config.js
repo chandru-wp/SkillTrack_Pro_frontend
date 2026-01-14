@@ -30,5 +30,5 @@ export default defineConfig({
       }
     })
   ],
-  base: '/SkillTrack_Pro_frontend/', // Correct base path for your repo name
+  base: '/', // Correct base path for custom domain
 })
