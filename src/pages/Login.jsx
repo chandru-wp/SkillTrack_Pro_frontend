@@ -21,9 +21,9 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(user))
       
       if (user.role === 'admin' || user.role === 'super_admin') {
-        navigate('/admin')
+        navigate('/admin01')
       } else {
-        navigate('/add-entry')
+        navigate('/add-entry01')
       }
     } catch (error) {
       console.error('Login failed:', error)

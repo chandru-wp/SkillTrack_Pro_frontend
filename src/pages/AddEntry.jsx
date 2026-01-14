@@ -332,7 +332,7 @@ const AddEntry = () => {
               <div className="pt-4 flex gap-4">
                  <button
                   type="button"
-                  onClick={() => navigate('/entries')}
+                  onClick={() => navigate('/entries01')}
                   className="flex-1 py-4 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-xl font-bold text-sm transition-all"
                 >
                   Cancel
