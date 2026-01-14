@@ -5,7 +5,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
-    react(), 
+    react({
+      jsxRuntime: 'automatic',
+    }), 
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -15,6 +17,8 @@ export default defineConfig({
         short_name: 'SkillTrack',
         description: 'Track your skills and practice sessions with ease',
         theme_color: '#2563eb',
+        background_color: '#ffffff',
+        display: 'standalone',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -27,6 +31,9 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
+      },
+      devOptions: {
+        enabled: false // Disable in dev until JSX is fixed
       }
     })
   ],

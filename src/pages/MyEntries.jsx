@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import { getAllEntries } from '../services/api'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 const MyEntries = () => {
   const [dateFrom, setDateFrom] = useState('')
@@ -29,9 +31,21 @@ const MyEntries = () => {
 
   const userId = currentUser?.id || 'test123'
 
-  // Calculate summary data dynamically from real backend entries
-  const yourEntries = entries.filter(e => e.userId === userId)
-  const othersEntries = entries.filter(e => e.userId !== userId)
+  // Refined Date Filtering Logic
+  const filteredEntriesByDate = entries.filter(entry => {
+    if (!dateFrom && !dateTo) return true
+    const entryDate = new Date(entry.startDate)
+    // Normalize comparison dates
+    const start = dateFrom ? new Date(dateFrom) : new Date('1970-01-01')
+    const end = dateTo ? new Date(dateTo) : new Date('2099-12-31')
+    // Set end to end of day to include the last day fully
+    end.setHours(23, 59, 59, 999)
+    return entryDate >= start && entryDate <= end
+  })
+
+  // Calculate summary data dynamically from filtered backend entries
+  const yourEntries = filteredEntriesByDate.filter(e => e.userId === userId)
+  const othersEntries = filteredEntriesByDate.filter(e => e.userId !== userId)
 
   const summaryData = {
     submittedByYou: {
@@ -46,8 +60,91 @@ const MyEntries = () => {
     }
   }
 
-  // Row-wise grouping for the table
-  const skillSummary = entries.reduce((acc, entry) => {
+  // PDF Generation Function
+  const handleDownloadReport = () => {
+    const doc = new jsPDF()
+    
+    // Header
+    doc.setFillColor(37, 99, 235)
+    doc.rect(0, 0, 210, 40, 'F')
+    doc.setTextColor(255, 255, 255)
+    doc.setFontSize(24)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Performance Report', 14, 25)
+    
+    doc.setFontSize(10)
+    doc.setFont('helvetica', 'normal')
+    doc.text(`SkillTrack Pro • ${currentUser?.name || 'User'}`, 14, 33)
+    
+    // Report Info
+    doc.setTextColor(100, 116, 139)
+    doc.text(`Period: ${dateFrom || 'All Time'} to ${dateTo || 'Present'}`, 14, 50)
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 160, 50)
+
+    // Summary Statistics
+    doc.setTextColor(30, 41, 59)
+    doc.setFontSize(16)
+    doc.setFont('helvetica', 'bold')
+    doc.text('Executive Summary', 14, 65)
+    
+    const summaryRows = [
+      ['Total Practice Hours', `${summaryData.submittedByYou.totalHours}h`],
+      ['Total Logs Submitted', `${summaryData.submittedByYou.count}`],
+      ['Peer Average (Hours)', `${summaryData.submittedByOthers.avgHours}h`],
+      ['Total Team Activity', `${summaryData.submittedByOthers.count} entries`]
+    ]
+
+    doc.autoTable({
+      startY: 70,
+      head: [['Metric', 'Value']],
+      body: summaryRows,
+      theme: 'grid',
+      headStyles: { fillColor: [37, 99, 235], fontSize: 11 },
+      styles: { fontSize: 10, cellPadding: 5 }
+    })
+
+    // Skill Breakdown
+    doc.text('Skill Proficiency Breakdown', 14, doc.lastAutoTable.finalY + 15)
+    const skillRows = skillSummaryArray.map(item => [
+      item.skill,
+      item.submittedByYou,
+      item.submittedByOthers,
+      'On Track'
+    ])
+
+    doc.autoTable({
+      startY: doc.lastAutoTable.finalY + 20,
+      head: [['Skill Focus', 'Your Investment', 'Team Average', 'Status']],
+      body: skillRows,
+      theme: 'striped',
+      headStyles: { fillColor: [51, 65, 85] },
+      styles: { fontSize: 9 }
+    })
+
+    // Activity Log
+    doc.text('Detailed Activity History', 14, doc.lastAutoTable.finalY + 15)
+    const activityRows = yourEntries.map(entry => [
+      new Date(entry.startDate).toLocaleDateString(),
+      entry.skills.join(', '),
+      entry.practiceType.join(', '),
+      `${entry.hoursSpent}h`,
+      entry.result || 'Competent'
+    ])
+
+    doc.autoTable({
+      startY: doc.lastAutoTable.finalY + 20,
+      head: [['Date', 'Skills Focus', 'Action Type', 'Hours', 'Outcome']],
+      body: activityRows,
+      theme: 'grid',
+      headStyles: { fillColor: [148, 163, 184] },
+      styles: { fontSize: 8 }
+    })
+
+    doc.save(`Performance_Report_${currentUser?.username || 'User'}_${new Date().toISOString().split('T')[0]}.pdf`)
+  }
+
+  // Row-wise grouping for the table - now using filtered entries
+  const skillSummary = filteredEntriesByDate.reduce((acc, entry) => {
     entry.skills.forEach(skill => {
       if (!acc[skill]) {
         acc[skill] = { skill, yourHours: 0, othersHours: 0, othersSessions: 0 }
@@ -203,7 +300,15 @@ const MyEntries = () => {
                 <h2 className="text-xl font-bold text-slate-800 tracking-tight">Skill Proficiency Breakdown</h2>
                 <p className="text-sm text-slate-500 mt-1">Comparison of your time investment vs team average</p>
               </div>
-              <button className="text-sm font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg transition-colors">Download Report</button>
+              <button 
+                onClick={handleDownloadReport}
+                className="flex items-center gap-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/20 active:scale-95"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download Report
+              </button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -259,24 +364,24 @@ const MyEntries = () => {
                <div className="h-px bg-slate-200 flex-1 ml-8"></div>
              </div>
              
-             <div className="grid gap-4">
+              <div className="grid gap-4">
               {isLoading ? (
                  <div className="text-center py-20">
                     <div className="inline-block animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
                     <p className="text-slate-400 font-medium">Loading entries...</p>
                  </div>
-              ) : entries.length === 0 ? (
+              ) : filteredEntriesByDate.length === 0 ? (
                  <div className="card-clean p-12 text-center border-dashed border-2 border-slate-200 bg-slate-50/50">
                     <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
                     </div>
-                    <p className="text-slate-500 font-medium text-lg mb-2">No activity logged yet</p>
-                    <p className="text-slate-400 text-sm">Start by adding your first practice session.</p>
+                    <p className="text-slate-500 font-medium text-lg mb-2">No activity found for this period</p>
+                    <p className="text-slate-400 text-sm">Try adjusting your filters or start logging new sessions.</p>
                  </div>
               ) : (
-                entries.map((entry) => (
+                filteredEntriesByDate.map((entry) => (
                   <div key={entry.id} className="card-clean p-6 hover:shadow-lg hover:border-blue-200 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group cursor-pointer">
                     <div className="flex items-start gap-5">
                       <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
