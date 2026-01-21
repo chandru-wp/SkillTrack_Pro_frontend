@@ -14,7 +14,7 @@ const CustomDropdown = ({ options, value, onChange, placeholder }) => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-5 py-3.5 bg-slate-50 border ${isOpen ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-slate-200'} rounded-xl text-left flex justify-between items-center transition-all`}
+        className={`w-full px-3 py-2.5 bg-slate-50 border ${isOpen ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-slate-200'} rounded-lg text-left flex justify-between items-center transition-all`}
       >
         <span className={`text-sm font-medium ${selectedOption ? 'text-slate-800' : 'text-slate-400'}`}>
           {selectedOption ? selectedOption.value : placeholder}
@@ -39,7 +39,7 @@ const CustomDropdown = ({ options, value, onChange, placeholder }) => {
                   onChange(option.value)
                   setIsOpen(false)
                 }}
-                className={`w-full px-5 py-3 text-left text-sm font-medium transition-colors hover:bg-slate-50 flex items-center justify-between ${
+                className={`w-full px-3 py-2 text-left text-sm font-medium transition-colors hover:bg-slate-50 flex items-center justify-between ${
                   value === option.value ? 'text-blue-600 bg-blue-50/50' : 'text-slate-600'
                 }`}
               >
@@ -158,13 +158,13 @@ const AddEntry = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 flex justify-center p-4 md:p-8">
-        <div className="relative w-full max-w-3xl">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-6 flex justify-center p-4">
+        <div className="relative w-full max-w-2xl">
           
-          <div className="card-clean p-8 md:p-10 animate-fade-up border border-slate-100 shadow-xl bg-white rounded-2xl">
+          <div className="card-clean p-6 animate-fade-up border border-slate-100 shadow-xl bg-white rounded-xl">
              {/* Header */}
-            <div className="text-center mb-10">
-              <h1 className="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">
+            <div className="text-center mb-5">
+              <h1 className="text-2xl font-extrabold text-slate-900 mb-1 tracking-tight">
                 Log Practice Session
               </h1>
               <p className="text-slate-500 font-medium">Record your learning activities and track your growth.</p>
@@ -181,11 +181,11 @@ const AddEntry = () => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-4">
               
               {/* Skill & Time */}
-              <div className="space-y-6">
-                <div className="space-y-3 relative z-20">
+              <div className="space-y-4">
+                <div className="space-y-1 relative z-20">
                   <label className="text-sm font-bold text-slate-700 uppercase tracking-wide ml-1">
                     Skill Focus <span className="text-red-500">*</span>
                   </label>
@@ -197,7 +197,7 @@ const AddEntry = () => {
                   />
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-1">
                   <label className="text-sm font-bold text-slate-700 uppercase tracking-wide ml-1">
                     Time Spent (Hours) <span className="text-red-500">*</span>
                   </label>
@@ -206,7 +206,7 @@ const AddEntry = () => {
                     min="0.5"
                     step="0.5"
                     placeholder="e.g. 2.5"
-                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm placeholder-slate-400"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm placeholder-slate-400"
                     value={formData.hoursSpent}
                     onChange={(e) => setFormData({...formData, hoursSpent: e.target.value})}
                     required
@@ -215,21 +215,21 @@ const AddEntry = () => {
               </div>
 
                {/* Date Range */}
-              <div className="space-y-3">
+              <div className="space-y-1">
                 <label className="text-sm font-bold text-slate-700 uppercase tracking-wide ml-1">
                   Date Range <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     type="date"
-                    className="px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm"
+                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm"
                     value={formData.dateRange.start}
                     onChange={(e) => setFormData({...formData, dateRange: { ...formData.dateRange, start: e.target.value }})}
                     required
                   />
                   <input
                     type="date"
-                    className="px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm"
+                    className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm"
                     value={formData.dateRange.end}
                     onChange={(e) => setFormData({...formData, dateRange: { ...formData.dateRange, end: e.target.value }})}
                     required
@@ -238,17 +238,17 @@ const AddEntry = () => {
               </div>
 
               {/* Skill Selection (PRACTICE TYPE) */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700 uppercase tracking-wide ml-1">
                   Session Type (Select all that apply)
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {practiceTypes.map((type) => (
                     <button
                       key={type.value}
                       type="button"
                       onClick={() => togglePracticeType(type.value)}
-                      className={`flex flex-col items-center justify-center gap-2 p-3 rounded-xl text-sm font-semibold transition-all border ${
+                      className={`flex flex-col items-center justify-center gap-1 p-2 rounded-lg text-xs font-semibold transition-all border ${
                         formData.practiceType.includes(type.value)
                            ? 'bg-slate-800 text-white border-slate-800 shadow-md ring-2 ring-slate-200'
                           : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
@@ -266,7 +266,7 @@ const AddEntry = () => {
                 </div>
 
                 {/* Conditional Fields */}
-                <div className="space-y-4 pt-2">
+                <div className="space-y-3 pt-1">
                   {formData.practiceType.includes('Work on a Project') && (
                     <div className="animate-fade-up">
                       <label className="text-sm font-bold text-slate-700 uppercase tracking-wide ml-1">
@@ -277,7 +277,7 @@ const AddEntry = () => {
                         placeholder="e.g., Portfolio Website, Task Manager App..."
                         value={formData.projectName}
                         onChange={(e) => setFormData({...formData, projectName: e.target.value})}
-                        className="w-full mt-2 px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm placeholder-slate-400"
+                        className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm placeholder-slate-400"
                         required
                       />
                     </div>
@@ -293,7 +293,7 @@ const AddEntry = () => {
                         placeholder="Please specify..."
                         value={formData.otherPracticeType}
                         onChange={(e) => setFormData({...formData, otherPracticeType: e.target.value})}
-                        className="w-full mt-2 px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm placeholder-slate-400"
+                        className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-sm placeholder-slate-400"
                         required
                       />
                     </div>
@@ -302,7 +302,7 @@ const AddEntry = () => {
               </div>
 
                {/* Result Achieved */}
-              <div className="space-y-3 relative z-10">
+              <div className="space-y-1 relative z-10">
                 <label className="text-sm font-bold text-slate-700 uppercase tracking-wide ml-1">
                   Result / Outcome
                 </label>
@@ -315,32 +315,32 @@ const AddEntry = () => {
               </div>
 
               {/* Notes */}
-              <div className="space-y-3 relative z-0">
+              <div className="space-y-1 relative z-0">
                 <label className="text-sm font-bold text-slate-700 uppercase tracking-wide ml-1">
                   Session Notes
                 </label>
                 <textarea
-                  rows="4"
+                  rows="3"
                   placeholder="What did you learn? Any challenges faced?"
-                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm resize-none placeholder-slate-400"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm resize-none placeholder-slate-400"
                   value={formData.notes}
                   onChange={(e) => setFormData({...formData, notes: e.target.value})}
                 ></textarea>
               </div>
 
               {/* Submit Button */}
-              <div className="pt-4 flex gap-4">
+              <div className="pt-2 flex gap-3">
                  <button
                   type="button"
                   onClick={() => navigate('/entries01')}
-                  className="flex-1 py-4 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-xl font-bold text-sm transition-all"
+                  className="flex-1 py-2.5 bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 rounded-lg font-bold text-sm transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-[2] py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                  className="flex-[2] py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-sm shadow-lg shadow-blue-500/20 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                 >
                   {isSubmitting ? 'Saving...' : 'Save Practice Log'}
                   {!isSubmitting && (

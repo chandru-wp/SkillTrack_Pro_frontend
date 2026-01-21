@@ -51,6 +51,11 @@ export const updateUser = async (userId, userData) => {
   return response.data
 }
 
+export const deleteUser = async (userId) => {
+  const response = await api.delete(`/users/${userId}`)
+  return response.data
+}
+
 // System Options APIs
 export const getOptions = async () => {
   const response = await api.get("/options")
@@ -79,5 +84,11 @@ export const forgotPassword = async (email) => {
 
 export const resetPassword = async (data) => {
   const response = await api.post('/reset-password', data)
+  return response.data
+}
+
+// Google Authentication
+export const googleAuth = async (userData) => {
+  const response = await api.post('/auth/google', userData)
   return response.data
 }

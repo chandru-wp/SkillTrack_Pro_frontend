@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getAllUsers, updateUser, getOptions, createOption, deleteOption, createUser, updateOption } from '../services/api'
+import { getAllUsers, updateUser, getOptions, createOption, deleteOption, createUser, updateOption, deleteUser } from '../services/api'
 import Navbar from '../components/Navbar'
 
 const AdminDashboard = () => {
@@ -95,6 +95,19 @@ const AdminDashboard = () => {
         } catch (error) {
             console.error('Failed to save user:', error)
             const message = error.response?.data?.message || 'Failed to save user'
+            alert(message)
+        }
+    }
+
+    const handleDeleteUser = async (user) => {
+        if (!window.confirm(`Are you sure you want to delete user "${user.username}"?`)) return
+        
+        try {
+            await deleteUser(user.id)
+            fetchData() 
+        } catch (error) {
+            console.error('Failed to delete user:', error)
+            const message = error.response?.data?.message || 'Failed to delete user'
             alert(message)
         }
     }
@@ -228,12 +241,20 @@ const AdminDashboard = () => {
                                                             {new Date(user.createdAt).toLocaleDateString()}
                                                         </td>
                                                         <td className="px-6 py-4 text-right">
-                                                            <button 
-                                                                onClick={() => handleEdit(user)}
-                                                                className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-                                                            >
-                                                                Edit
-                                                            </button>
+                                                            <div className="flex justify-end gap-3">
+                                                                <button 
+                                                                    onClick={() => handleEdit(user)}
+                                                                    className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                                <button 
+                                                                    onClick={() => handleDeleteUser(user)}
+                                                                    className="text-red-500 hover:text-red-700 font-medium text-sm"
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -289,12 +310,20 @@ const AdminDashboard = () => {
                                                             <td className="px-6 py-4 text-sm text-slate-600">{user.email}</td>
                                                             <td className="px-6 py-4 text-right">
                                                                 {user.role !== 'super_admin' ? (
-                                                                    <button 
-                                                                        onClick={() => handleEdit(user)}
-                                                                        className="text-blue-600 hover:text-blue-800 font-medium text-sm"
-                                                                    >
-                                                                        Edit
-                                                                    </button>
+                                                                    <div className="flex justify-end gap-3">
+                                                                        <button 
+                                                                            onClick={() => handleEdit(user)}
+                                                                            className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                                                                        >
+                                                                            Edit
+                                                                        </button>
+                                                                        <button 
+                                                                            onClick={() => handleDeleteUser(user)}
+                                                                            className="text-red-500 hover:text-red-700 font-medium text-sm"
+                                                                        >
+                                                                            Delete
+                                                                        </button>
+                                                                    </div>
                                                                 ) : (
                                                                     <span className="text-xs text-amber-600 font-bold tracking-tight uppercase px-2 py-1 bg-amber-50 rounded">🔥 Main Admin</span>
                                                                 )}

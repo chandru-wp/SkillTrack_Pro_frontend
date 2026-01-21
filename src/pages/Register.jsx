@@ -61,7 +61,7 @@ const Register = () => {
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-100/50 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-100/50 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-blob animation-delay-2000"></div>
 
-      <div className="card-clean w-full max-w-[480px] bg-white/80 backdrop-blur-xl border border-white/20 p-6 md:p-8 relative z-10 animate-fade-up shadow-2xl">
+      <div className="border rounded-4xl  card-clean w-full max-w-[480px] bg-white/80 backdrop-blur-xl border border-white/20 p-6 md:p-8 relative z-10 animate-fade-up shadow-2xl">
         
         {/* Header */}
         <div className="text-center mb-6">
